@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Couples Dare Wheel - Spicy Edition</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a0a2e, #2d0b3d, #4a154b);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        header {
+            text-align: center;
+            margin: 20px 0 30px;
+            width: 100%;
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+            text-shadow: 0 0 15px rgba(255, 20, 147, 0.7);
+            background: linear-gradient(to right, #ff0099, #ff5e62, #ff9966);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+            letter-spacing: 2px;
+        }
+        
+        .subtitle {
+            font-size: 1.4rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+            color: #ffb6c1;
+            font-style: italic;
+        }
+        
+        .game-area {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 40px;
+            width: 100%;
+            margin: 20px 0 40px;
+        }
+        
+        .wheel-container {
+            position: relative;
+            width: 500px;
+            height: 500px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .wheel {
+            width: 100%;
+            height: 100%;
+            background: conic-gradient(
+                from 0deg,
+                #ff3e8a, #ff6b6b, #ff8e53, #ffb142, #ffcc5c,
+                #d8ff5c, #9cff5c, #5cff7d, #5cffc2, #5cd3ff,
+                #5c9cff, #7d5cff, #c25cff, #ff5cd3, #ff5c9c,
+                #ff3e8a, #ff6b6b, #ff8e53, #ffb142, #ffcc5c,
+                #d8ff5c, #9cff5c, #5cff7d, #5cffc2, #5cd3ff,
+                #5c9cff, #7d5cff, #c25cff, #ff5cd3, #ff5c9c,
+                #ff3e8a, #ff6b6b, #ff8e53, #ffb142, #ffcc5c,
+                #d8ff5c, #9cff5c, #5cff7d, #5cffc2, #5cd3ff
+            );
+            border-radius: 50%;
+            position: relative;
+            transition: transform 4s cubic-bezier(0.17, 0.67, 0.14, 0.93);
+            box-shadow: 0 0 30px rgba(255, 20, 147, 0.5);
+            overflow: hidden;
+        }
+        
+        .wheel::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120px;
+            height: 120px;
+            background: #2d0b3d;
+            border-radius: 50%;
+            border: 5px solid #ff5c9c;
+            box-shadow: 0 0 15px rgba(255, 92, 156, 0.7);
+        }
+        
+        .pointer {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 60px;
+            background: #ff0066;
+            clip-path: polygon(50% 100%, 0 0, 100% 0);
+            z-index: 10;
+            box-shadow: 0 0 15px rgba(255, 0, 102, 0.8);
+        }
+        
+        .spin-button {
+            background: linear-gradient(45deg, #ff0066, #ff5e62);
+            color: white;
+            border: none;
+            padding: 18px 50px;
+            font-size: 1.8rem;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 25px rgba(255, 0, 102, 0.5);
+            letter-spacing: 2px;
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .spin-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(255, 0, 102, 0.7);
+        }
+        
+        .spin-button:active {
+            transform: translateY(1px);
+        }
+        
+        .spin-button:disabled {
+            background: linear-gradient(45deg, #7a0039, #7a3e40);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: 0 5px 15px rgba(122, 0, 57, 0.3);
+        }
+        
+        .result-container {
+            background: rgba(45, 11, 61, 0.8);
+            border: 2px solid #ff5c9c;
+            border-radius: 20px;
+            padding: 30px;
+            width: 500px;
+            min-height: 300px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .result-title {
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            color: #ffb6c1;
+            text-shadow: 0 0 10px rgba(255, 182, 193, 0.5);
+        }
+        
+        .dare-result {
+            font-size: 1.6rem;
+            line-height: 1.6;
+            color: #ffffff;
+            background: rgba(255, 92, 156, 0.2);
+            padding: 20px;
+            border-radius: 15px;
+            width: 100%;
+            min-height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-weight: 500;
+            border: 1px dashed #ff5c9c;
+        }
+        
+        .instructions {
+            max-width: 800px;
+            margin: 30px auto 40px;
+            text-align: center;
+            font-size: 1.2rem;
+            line-height: 1.7;
+            color: #e6d0ff;
+            background: rgba(74, 21, 75, 0.5);
+            padding: 25px;
+            border-radius: 20px;
+            border: 1px solid #c25cff;
+        }
+        
+        .instructions h2 {
+            margin-bottom: 15px;
+            color: #ffcc5c;
+        }
+        
+        .fire-icon {
+            color: #ff9966;
+            margin: 0 10px;
+            font-size: 1.5rem;
+        }
+        
+        .hearts {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .heart {
+            position: absolute;
+            font-size: 24px;
+            color: #ff5c9c;
+            opacity: 0;
+            animation: falling 10s linear infinite;
+        }
+        
+        @keyframes falling {
+            0% {
+                transform: translateY(-50px) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(calc(100vh + 50px)) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            color: #d8b0ff;
+            font-size: 1rem;
+            padding: 20px;
+            width: 100%;
+            border-top: 1px solid #7d5cff;
+        }
+        
+        @media (max-width: 1100px) {
+            .game-area {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .wheel-container {
+                width: 400px;
+                height: 400px;
+            }
+            
+            .result-container {
+                width: 400px;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .wheel-container {
+                width: 320px;
+                height: 320px;
+            }
+            
+            .result-container {
+                width: 320px;
+                padding: 20px;
+            }
+            
+            .dare-result {
+                font-size: 1.3rem;
+            }
+            
+            .spin-button {
+                padding: 15px 35px;
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hearts" id="hearts-container"></div>
+    
+    <div class="container">
+        <header>
+            <h1>🔥 Dare Wheel 🔥</h1>
+            <p class="subtitle">For a night of passion, intimacy, and unforgettable moments with your partner</p>
+        </header>
+        
+        <div class="instructions">
+            <h2>How to Play</h2>
+            <p>Click the SPIN button to set the wheel in motion. When it stops, the dare under the pointer is your challenge!</p>
+            <p>Complete the dare together to keep the passion burning <i class="fas fa-fire fire-icon"></i></p>
+        </div>
+        
+        <div class="game-area">
+            <div class="wheel-container">
+                <div class="wheel" id="wheel"></div>
+                <div class="pointer"></div>
+            </div>
+            
+            <div class="result-container">
+                <h3 class="result-title">Your Dare:</h3>
+                <div class="dare-result" id="dare-result">
+                    Spin the wheel to reveal your first dare!
+                </div>
+            </div>
+        </div>
+        
+        <button class="spin-button" id="spin-button">SPIN THE WHEEL</button>
+    </div>
+    
+    <div class="footer">
+        <p>Created for couples seeking to ignite passion and connection | Enjoy responsibly</p>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const wheel = document.getElementById('wheel');
+            const spinButton = document.getElementById('spin-button');
+            const dareResult = document.getElementById('dare-result');
+            const heartsContainer = document.getElementById('hearts-container');
+            
+            // Create the dares array
+            const dares = [
+                "Kiss me passionately… like it’s our first time.",
+                "Go down on me (or the other) for 30 seconds.",
+                "Draw me… like one of your French girls.",
+                "You can’t say my name for 30 minutes. I’ll choose what you call me instead.",
+                "Watch porn together — then copy what they're doing.",
+                "Kiss the part of my body you most want to cum on.",
+                "Show me a video of something you'd like us to try together.",
+                "Take off your underwear… slowly.",
+                "Brush my hair — tender, sensual, or teasing... your choice.",
+                "Put an ice cube in your mouth… then go down on me for 15 seconds.",
+                "Spank me (or your partner) three times — make it count.",
+                "Give me a shoulder massage... with your hands or your lips.",
+                "Make out with me… dry hump included.",
+                "Choose and try a new sex position — no repeats.",
+                "Taste my sexual fluids from your fingers… or mine.",
+                "Fake an orgasm for 30 seconds — make it convincing.",
+                "Grind on a pillow for 30 seconds… and let me watch.",
+                "Text your best friend asking for 'sex tips' — see what they say.",
+                "Describe yourself to me… seductively.",
+                "Send me a nude. Right now.",
+                "Pretend you’re working a phone sex line… and I’m your next caller.",
+                "Use your best pick-up line on me — try to seduce me.",
+                "Choose a piece of erotica and read it out loud… slowly.",
+                "Talk in a sexy accent for the next 15 minutes.",
+                "Hold deep eye contact with me for 90 seconds… no breaking.",
+                "Slow dance with me to a romantic song… right here, right now.",
+                "Pretend you’ve just won the award for 'Best Sex Performance'… now give me your acceptance speech.",
+                "Masturbate to a picture of me that you have on your phone.",
+                "Blindfold me for 5 minutes… and do what you like.",
+                "Roleplay as a celebrity who’s desperate to f*ck me.",
+                "Kiss my neck — like you can’t resist me.",
+                "Be my obedient slave for the next 5 minutes.",
+                "Show me a sex toy you’re curious about but nervous to try… and tell me why.",
+                "Let me watch you touch yourself… for 2 full minutes.",
+                "Say five real, genuine compliments about me — naughty, sweet, or sexy.",
+                "Read an erotic scene to me… for five minutes straight.",
+                "Trace a secret message on my back with your finger. If I guess it right, I get a reward. If I don't... you do.",
+                "For one minute… I have total control over you.",
+                "Write me a poem — naughty, romantic, or filthy.",
+                "Try a new kissing style… then rate it together.",
+                "Send me a filthy sext… something you'd never normally text.",
+                "Play with my nipples for 30 seconds… hands, mouth, or tongue — your choice."
+            ];
+            
+            // Create floating hearts
+            function createHearts() {
+                for (let i = 0; i < 50; i++) {
+                    const heart = document.createElement('div');
+                    heart.classList.add('heart');
+                    heart.innerHTML = '❤';
+                    heart.style.left = `${Math.random() * 100}%`;
+                    heart.style.animationDuration = `${Math.random() * 10 + 10}s`;
+                    heart.style.animationDelay = `${Math.random() * 5}s`;
+                    heartsContainer.appendChild(heart);
+                }
+            }
+            
+            // Wheel spinning animation
+            function spinWheel() {
+                spinButton.disabled = true;
+                dareResult.textContent = "The wheel is spinning...";
+                
+                // Calculate random rotation (5-10 full rotations + segment offset)
+                const spins = 5 + Math.floor(Math.random() * 6);
+                const segmentAngle = 360 / dares.length;
+                const selectedIndex = Math.floor(Math.random() * dares.length);
+                const rotation = spins * 360 + selectedIndex * segmentAngle;
+                
+                // Apply rotation
+                wheel.style.transform = `rotate(${-rotation}deg)`;
+                
+                // Wait for animation to finish
+                setTimeout(() => {
+                    dareResult.innerHTML = `<span style="color:#ffcc5c; font-weight:bold">${dares[selectedIndex]}</span>`;
+                    spinButton.disabled = false;
+                    
+                    // Add sparkle effect
+                    dareResult.style.boxShadow = "0 0 20px rgba(255, 204, 92, 0.7)";
+                    setTimeout(() => {
+                        dareResult.style.boxShadow = "none";
+                    }, 2000);
+                }, 4000);
+            }
+            
+            // Event listeners
+            spinButton.addEventListener('click', spinWheel);
+            
+            // Initialize the hearts
+            createHearts();
+        });
+    </script>
+</body>
+</html>
